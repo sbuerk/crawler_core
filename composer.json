@@ -1,0 +1,19 @@
+{
+    "name": "sbuerk/crawler_core",
+    "description": "Basic TYPO3 based crawler",
+    "type": "typo3-cms-extension",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Stefan Bürk",
+            "email": "stefan.buerk@impactmedia.de"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "SBUERK\\CrawlerCore\\": "Classes/"
+        }
+    }
+}

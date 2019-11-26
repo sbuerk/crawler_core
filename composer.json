@@ -9,11 +9,30 @@
             "email": "stefan.buerk@impactmedia.de"
         }
     ],
+    "keywords": [
+        "TYPO3",
+        "extension",
+        "crawler"
+    ],
     "minimum-stability": "dev",
     "require": {},
+    "replace": {
+        "typo3-ter/crawler_core": "self.version"
+    },
     "autoload": {
         "psr-4": {
             "SBUERK\\CrawlerCore\\": "Classes/"
+        }
+    },
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin"
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "crawler_core",
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "web-dir": ".Build/Web"
         }
     }
 }

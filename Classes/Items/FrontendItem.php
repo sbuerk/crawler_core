@@ -7,8 +7,15 @@ namespace SBUERK\CrawlerCore\Items;
  *
  * @package SBUERK\CrawlerCore\Items
  */
-class FrontendItem
+class FrontendItem extends AbstractItem
 {
+
+    /** @var string[] */
+    protected $_properties = [
+        'running',
+        'item',
+    ];
+
     private $running = false;
 
     /** @var null|QueueItem */
@@ -17,7 +24,7 @@ class FrontendItem
     /**
      * @return bool
      */
-    public function isRunning(): bool
+    public function getRunning(): bool
     {
         return $this->running;
     }

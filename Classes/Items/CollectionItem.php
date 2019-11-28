@@ -7,8 +7,18 @@ namespace SBUERK\CrawlerCore\Items;
  *
  * @package SBUERK\CrawlerCore\Items
  */
-class CollectionItem
+class CollectionItem extends AbstractItem
 {
+
+    /** @var string[] */
+    protected $_properties = [
+        'id',
+        'crdate',
+        'total',
+        'finished',
+        'description'
+    ];
+
     /** @var int|null */
     private $id;
 

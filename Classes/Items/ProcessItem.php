@@ -7,8 +7,22 @@ namespace SBUERK\CrawlerCore\Items;
  *
  * @package SBUERK\CrawlerCore\Items
  */
-class ProcessItem
+class ProcessItem extends AbstractItem
 {
+    /** @var string[] */
+    protected $_properties = [
+        'id',
+        'crdate',
+        'type_id',
+        'process_id',
+        'uuid',
+        'active',
+        'deleted',
+        'ttl',
+        'max_items',
+        'total',
+    ];
+
     /** @var int|null */
     private $id;
 

@@ -16,7 +16,9 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "typo3/cms-core": "^7.6.13 || >=8.5.0 <9"
+        "php" : "^7.2 || ^7.3 || ^7.4",
+        "ext-json": "*",
+        "typo3/cms-core": ">=8.5.0 <9"
     },
     "replace": {
         "typo3-ter/crawler_core": "self.version"

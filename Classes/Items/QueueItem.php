@@ -7,8 +7,23 @@ namespace SBUERK\CrawlerCore\Items;
  *
  * @package SBUERK\CrawlerCore\Items
  */
-class QueueItem
+class QueueItem extends AbstractItem
 {
+    /** @var string[] */
+    protected $_properties = [
+        'id',
+        'crdate',
+        'priority',
+        'collection_id',
+        'type_id',
+        'external',
+        'process_scheduled',
+        'process_id',
+        'process_completed',
+        'request_data',
+        'result_data',
+    ];
+
     /** @var int|null */
     private $id;
 

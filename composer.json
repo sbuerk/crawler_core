@@ -15,7 +15,9 @@
         "crawler"
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "typo3/cms-core": "^7.6.13 || >=8.5.0 <9"
+    },
     "replace": {
         "typo3-ter/crawler_core": "self.version"
     },

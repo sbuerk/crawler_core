@@ -129,9 +129,7 @@ class ItemService
         // prepare data
         //--------------------------------------------------------------------------------------------------------------
         if ($data)
-        {
-            // @todo implement data prepare hook
-        }
+            $data = $this->prepareItemData($data, $instance);
         //--------------------------------------------------------------------------------------------------------------
 
         //--------------------------------------------------------------------------------------------------------------
@@ -150,6 +148,99 @@ class ItemService
         return $instance;
     }
 
+    /**
+     * @todo eventually move to prepare data hook, simple to have a working example in place
+     *
+     * @param array $data
+     * @param AbstractItem $item
+     * @return array
+     */
+    protected function prepareItemData(array $data, AbstractItem $item)
+    {
+        switch(TRUE)
+        {
+            case ($item instanceof QueueItem):
+                    $data['id']                 = (int)($data['id'] ?? 0);
+                    $data['crdate']             = (int)($data['crdate'] ?? 0);
+                    $data['type_id']            = (int)($data['type_id'] ?? 0);
+                    $data['collection_id']      = (int)($data['collection_id'] ?? 0);
+                    $data['priority']           = (int)($data['priority'] ?? 0);
+                    $data['external']           = (bool)($data['external'] ?? false);
+                    $data['process_scheduled']  = (bool)($data['process_scheduled'] ?? false);
+                    $data['process_id']         = (int)($data['process_id'] ?? 0);
+                    $data['process_completed']  = (bool)($data['process_completed'] ?? false);
+                    $data['request_data']       = (string)($data['request_data'] ?? '');
+                    $data['result_data']        = (string)($data['result_data'] ?? '');
+                break;
+
+            case ($item instanceof ProcessItem):
+                    $data['id']                 = (int)($data['id'] ?? 0);
+                    $data['crdate']             = (int)($data['crdate'] ?? 0);
+                    $data['type_id']            = (int)($data['type_id'] ?? 0);
+                    $data['process_id']         = (int)($data['process_id'] ?? 0);
+                    $data['uuid']               = (string)($data['uuid'] ?? '');
+                    $data['active']             = (bool)($data['active'] ?? false);
+                    $data['deleted']            = (bool)($data['deleted'] ?? false);
+                    $data['ttl']                = (int)($data['ttl'] ?? 0);
+                    $data['max_items']          = (int)($data['max_items'] ?? 0);
+                    $data['total']              = (int)($data['total'] ?? 0);
+                break;
+
+            case ($item instanceof CollectionItem):
+                    $data['id']                 = (int)($data['id'] ?? 0);
+                    $data['crdate']             = (int)($data['crdate'] ?? 0);
+                    $data['total']              = (int)($data['total'] ?? 0);
+                    $data['finished']           = (int)($data['finished'] ?? 0);
+                    $data['description']        = (string)($data['description'] ?? '');
+                break;
+
+            default:
+        }
+
+        return $data;
+    }
+
+    protected function prepareDatabaseData(array $data, int $id, AbstractItem $item)
+    {
+        switch(TRUE)
+        {
+            case ($item instanceof QueueItem):
+                    $data['crdate']             = (empty((int)$data['crdate']) ? time() : (int)$data['crdate']);
+                    $data['type_id']            = (int)($data['type_id'] ?? 0);
+                    $data['collection_id']      = (int)($data['collection_id'] ?? 0);
+                    $data['external']           = (int)($data['external'] ?? false);
+                    $data['process_scheduled']  = (int)($data['process_scheduled'] ?? false);
+                    $data['process_id']         = (int)($data['process_id'] ?? 0);
+                    $data['process_completed']  = (int)($data['process_completed'] ?? false);
+                    $data['request_data']       = (string)($data['request_data'] ?? '');
+                    $data['result_data']        = (string)($data['result_data'] ?? '');
+                break;
+
+            case ($item instanceof ProcessItem):
+                    $data['crdate']             = (empty((int)$data['crdate']) ? time() : (int)$data['crdate']);
+                    $data['type_id']            = (int)($data['type_id'] ?? 0);
+                    $data['process_id']         = (int)($data['process_id'] ?? 0);
+                    $data['uuid']               = (string)($data['uuid'] ?? '');
+                    $data['active']             = (int)($data['active'] ?? false);
+                    $data['deleted']            = (int)($data['deleted'] ?? false);
+                    $data['ttl']                = (int)($data['ttl'] ?? 0);
+                    $data['max_items']          = (int)($data['max_items'] ?? 0);
+                    $data['total']              = (int)($data['total'] ?? 0);
+                break;
+
+            case ($item instanceof CollectionItem):
+                    $data['crdate']             = (empty((int)$data['crdate']) ? time() : (int)$data['crdate']);
+                    $data['total']              = (int)($data['total'] ?? 0);
+                    $data['finished']           = (int)($data['finished'] ?? 0);
+                    $data['description']        = (string)($data['description'] ?? '');
+                break;
+
+            default:
+        }
+
+        return $data;
+    }
+
     public function saveItem(AbstractItem &$item)
     {
         list($table, $idField) = $this->getTableAndIdFieldName($item);
@@ -157,17 +248,17 @@ class ItemService
             return FALSE;
 
         $data       = $item->getData();
-        $id         = $data[$idField] ?? null;
+        $id         = $data[$idField] ?? 0;
         unset($data[$idField]);
 
-        // @todo prepare data for database save hook
+        $data       = $this->prepareDatabaseData($data, (int)$id, $item);
 
-        if ($id > 0)
+        if ($id)
         {
             $this->connection->update(
                 $table,
                 $data,
-                ['id' => $id]
+                [$idField => (int)$id]
             );
             return TRUE;
         } else {
